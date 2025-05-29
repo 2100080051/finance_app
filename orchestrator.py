@@ -66,5 +66,6 @@ def ask_finance_assistant(data: QueryInput, background_tasks: BackgroundTasks):
 # Optional: allow running locally
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    import os
+    port = int(os.environ.get("PORT", 8000))  
+    uvicorn.run("orchestrator:app", host="0.0.0.0", port=port)
