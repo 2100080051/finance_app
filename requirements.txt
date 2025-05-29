@@ -4,6 +4,8 @@ yfinance
 pandas
 requests
 faiss-cpu
+python-dotenv
+
 
 
 openai
