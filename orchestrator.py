@@ -1,5 +1,6 @@
 from fastapi import FastAPI, BackgroundTasks
 from pydantic import BaseModel
+import os  # Needed if using uvicorn.run in __main__
 
 from agents.api_agent import APIFinanceAgent
 from agents.scraping_agent import ScrapingAgent
@@ -29,7 +30,7 @@ class QueryInput(BaseModel):
 def root():
     return {
         "message": "✅ Finance Assistant API is running!",
-        "docs_url": "http://127.0.0.1:8000/docs",
+        "docs_url": "/docs",  # Removed hardcoded localhost
         "how_to_use": "Send a POST request to /ask with 'query' and 'stock_symbol'."
     }
 
@@ -50,10 +51,10 @@ def ask_finance_assistant(data: QueryInput, background_tasks: BackgroundTasks):
     # 4. Generate summary
     final_summary = language_agent.generate_summary(stock_data, news_data, retrieved_docs)
 
-    # 5. Speak in background to avoid timeout
+    # 5. Speak in background
     background_tasks.add_task(voice_agent.speak_text, final_summary)
 
-    # 6. Return response immediately
+    # 6. Return response
     return {
         "query": query,
         "stock_data": stock_data,
@@ -61,3 +62,9 @@ def ask_finance_assistant(data: QueryInput, background_tasks: BackgroundTasks):
         "documents": retrieved_docs,
         "summary": final_summary
     }
+
+# Optional: allow running locally
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
