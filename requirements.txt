@@ -6,7 +6,7 @@ requests
 faiss-cpu
 python-dotenv
 pyttsx3
-
+speech_recognition
 openai
 
 
