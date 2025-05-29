@@ -5,8 +5,7 @@ pandas
 requests
 faiss-cpu
 python-dotenv
-
-
+pyttsx3
 
 openai
 
